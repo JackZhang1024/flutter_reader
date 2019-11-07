@@ -1,111 +1,137 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_reader/common/ColorsUtil.dart';
+import 'package:flutter_reader/common/DbProvider.dart';
+import 'package:flutter_reader/pages/BookStore.dart';
+import 'package:flutter_reader/pages/MyInfoPage.dart';
+import 'package:flutter_reader/pages/DrawerPage.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'FlutterReader111'),
-    );
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return new MyAppState();
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+// TickerProviderStateMixin 动画相关
+class MyAppState extends State<MyApp> with TickerProviderStateMixin {
+  // 设置需要展示的tab序列号
+  int selectedIndex = 0;
+  TabController controller;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+  final tabTextStyleNormal =
+      new TextStyle(color: Color(ColorsUtil.TYPEFACE_BLACK));
+  final tabTextStyleSelected =
+      new TextStyle(color: Color(ColorsUtil.THEME_BLACK));
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  // image 数组
+  var tabImages;
+  var bodyStack;
 
-  final String title;
+  // appBar 的标题数组
+  var appBarTitles = ['首页', '我的'];
+
+  Image getTabImage(path) {
+    return new Image.asset(path, width: 20.0, height: 20.0);
+  }
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller = TabController(length: 2, vsync: this);
+    controller.addListener(() {
+      setState(() {
+        selectedIndex = controller.index;
+      });
     });
   }
 
+  void initData() {
+    DbProvider commentProvider = new DbProvider();
+    // 当tabImages 为空的时候初始化tabImages
+    if (tabImages == null) {
+      tabImages = [
+        [
+          getTabImage('images/icon_home.png'),
+          getTabImage('images/icon_home_default.png')
+        ],
+        [
+          getTabImage('images/icon_my.png'),
+          getTabImage('images/icon_my_default.png')
+        ]
+      ];
+    }
+    bodyStack = new IndexedStack(
+      children: <Widget>[new BookStore(), new MyInfoPage()],
+      index: selectedIndex,
+    );
+    print("main.dart initData  ");
+  }
+
+  TextStyle getTabTextStyle(int curIndex) {
+    if (curIndex == selectedIndex) {
+      return tabTextStyleSelected;
+    }
+    return tabTextStyleNormal;
+  }
+
+  Image getTabIcon(int curIndex) {
+    if (curIndex == selectedIndex) {
+      return tabImages[curIndex][0];
+    }
+    return tabImages[curIndex][1];
+  }
+
+  Text getTabTitle(int curIndex) {
+    return new Text(
+      appBarTitles[curIndex],
+      style: getTabTextStyle(curIndex),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+    initData();
+    return new MaterialApp(
+      theme: new ThemeData(primaryColor: Colors.black),
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text(
+            appBarTitles[selectedIndex],
+            style: new TextStyle(color: Colors.white),
+          ),
+          iconTheme: new IconThemeData(color: Colors.white),
         ),
+        // body stack
+        body: TabBarView(
+          controller: controller,
+          physics: NeverScrollableScrollPhysics(),
+          children: <Widget>[new BookStore(), new MyInfoPage()],
+        ),
+        bottomNavigationBar: new CupertinoTabBar(
+            backgroundColor: const Color(0xFFEAE9E7),
+            items: <BottomNavigationBarItem>[
+              new BottomNavigationBarItem(icon: getTabIcon(0), title: getTabTitle(0)),
+              new BottomNavigationBarItem(icon: getTabIcon(1), title: getTabTitle(1))
+            ],
+            // 当前选中的序列
+            currentIndex: selectedIndex,
+            onTap: (index){
+              // 必须调用setState 方法, 否则界面不会更新
+              setState(() {
+                   controller.index = index;
+                   selectedIndex = index;
+              });
+            },
+        ),
+        // 这里是这设置侧边栏的地方
+        drawer: new DrawerPage()
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

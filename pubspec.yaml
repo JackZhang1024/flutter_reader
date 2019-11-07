@@ -27,6 +27,7 @@ dependencies:
   http: ^0.12.0
   image_picker: ^0.4.1
   fluttertoast: ^2.0.7
+  sqflite: ^0.13.0
 
 
 
@@ -50,9 +51,28 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #  - images/a_dot_burr.jpeg
-  #  - images/a_dot_ham.jpeg
+  assets:
+      - images/icon_home.png
+      - images/icon_home_default.png
+      - images/icon_my.png
+      - images/icon_my_default.png
+      - images/icon_arrow_right.png
+      - images/img_book_yskf.jpg
+      - images/img_bg.png
+      - images/img_header.jpeg
+      - images/icon_setting.png
+      - images/icon_user.png
+      - images/icon_star_checked.png
+      - images/icon_star_default.png
+      - images/icon_star.png
+      - images/icon_collection.png
+      - images/icon_love.png
+      - images/icon_praise.png
+      - images/img_card.png
+      - images/img_book_card.png
+      - images/icon_love_card.png
+      - images/img_login.png
+      - images/img_register.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
