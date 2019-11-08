@@ -141,7 +141,16 @@ class BookListState extends State<BookList> with AutomaticKeepAliveClientMixin {
                               AssetImage('assets/images/placeholder.png'),
                           image: NetworkImage(itemData['image'])),
                     ),
-                  )))
+                  ))),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              itemData['name'],
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.body2,
+            ),
+          )
         ]),
       ),
     );
