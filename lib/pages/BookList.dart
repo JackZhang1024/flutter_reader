@@ -125,7 +125,9 @@ class BookListState extends State<BookList> with AutomaticKeepAliveClientMixin {
   Widget bookRow(i) {
     var itemData = listData[i];
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+
+      },
       child: Container(
         child: Column(children: <Widget>[
           Expanded(
