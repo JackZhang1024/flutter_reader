@@ -53,6 +53,7 @@ class MyAppState extends State<MyApp> with TickerProviderStateMixin {
 
   void initData() {
     DbProvider commentProvider = new DbProvider();
+    commentProvider.create();
     // 当tabImages 为空的时候初始化tabImages
     if (tabImages == null) {
       tabImages = [

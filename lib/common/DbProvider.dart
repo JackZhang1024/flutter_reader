@@ -73,8 +73,8 @@ class DbProvider {
   Future<bool> isCollectBook(String bookName) async {
     String path = await getPath();
     Database db = await openDatabase(path);
-    List<Map> maps = await db.rawQuery("SELECT * FROM tableCollectBook "
-            "where name like '" +
+    List<Map> maps = await db.rawQuery("SELECT * FROM "+tableCollectBook+
+            " where name like '" +
         bookName +
         "'");
     if (maps.length > 0) {

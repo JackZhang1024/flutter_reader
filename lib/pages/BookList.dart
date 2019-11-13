@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reader/api/Api.dart';
 import 'package:flutter_reader/api/NetUtils.dart';
+import 'package:flutter_reader/pages/BookDetailPage.dart';
+import 'package:flutter_reader/pages/BookDetailPageNew.dart';
 import 'dart:io';
 import 'dart:convert';
 
@@ -124,26 +126,40 @@ class BookListState extends State<BookList> with AutomaticKeepAliveClientMixin {
   // 构建每一本书籍Item的Widget
   Widget bookRow(i) {
     var itemData = listData[i];
+    print('bookRow $i ${itemData['image']}');
     return GestureDetector(
       onTap: () {
-
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BookDetailPageNew(id: itemData['id'], name: itemData['name'])));
       },
       child: Container(
         child: Column(children: <Widget>[
           Expanded(
-              child: Card(
-                  elevation: 8.0,
-                  child: AspectRatio(
-                    aspectRatio: 3 / 4,
-                    child: Hero(
-                      tag: itemData['image'],
-                      child: FadeInImage(
-                          fit: BoxFit.fill,
-                          placeholder:
-                              AssetImage('assets/images/placeholder.png'),
-                          image: NetworkImage(itemData['image'])),
+              flex: 1,
+              child: Material(
+                elevation: 8.0,
+                borderRadius: BorderRadius.circular(5.0),
+                shadowColor: Colors.blue.shade200,
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
                     ),
-                  ))),
+                    Container(
+                      alignment: Alignment.center,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                      child: Image(
+                        image: NetworkImage(itemData['image']),
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                  ],
+                ),
+              )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(

@@ -95,7 +95,7 @@ class _MyInfoState extends State<MyInfoPage> {
               child: (isLogin == false || imageHeader == null)
                   ? CircleAvatar(
                       backgroundColor: Colors.white,
-                      backgroundImage: new AssetImage('images/user.png'),
+                      backgroundImage: new AssetImage('images/icon_user.png'),
                       radius: 40.0,
                     )
                   : CircleAvatar(

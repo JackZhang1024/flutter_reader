@@ -5,7 +5,7 @@ class Book{
   static const columnImg = 'img';
 
 
-  int id;
+  String id;
   String name;
   String bookId;
   String image;
